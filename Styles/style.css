@@ -1,0 +1,27 @@
+.flex-parent {
+    display: flex;
+}
+  
+.jc-center {
+    justify-content: center;
+}
+
+.jc-header1 {
+    text-align: center; 
+    font-size: 108px; 
+}
+.jc-paragraph {
+    text-align: center; 
+    font-size: 48px;
+}
+.jc-button {
+    width: 320px;
+    height: 60px;
+    font-size: 36px;
+    background-color: white;
+    border-radius: 10px;
+}
+.jc-button:hover {
+    cursor: pointer;
+    background-color: rgb(211, 211, 211);
+}

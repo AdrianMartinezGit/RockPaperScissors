@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../Styles/style.css">
+</head>
+<body>   
+    <h1 class="jc-header1">Choose your Opponent!</h1>
+
+    <p class="jc-paragraph">
+        <b>1 v 1:</b> Play against another Player from the local computer!<br><br>
+        <b>vs CPU:</b> Play against a computer controlled player!
+    </p>
+    
+    <div class="flex-parent jc-center" style="padding-top: 50px;">
+        <div class="row">
+            <div class="col">
+                <button type="submit" class="jc-button" onclick="window.location.href='../Pages/mode.html'; localStorage.playerSetting=0;">1 v 1</button>
+            </div>
+
+            <div class="col" style="padding-top: 50px;">
+                <button type="submit" class="jc-button" onclick="window.location.href='../Pages/mode.html'; localStorage.playerSetting=1;">vs CPU</button>
+            </div>
+        </div>
+    </div>
+    <script src="../Scripts/app.js"></script>
+</body>
+</html>
