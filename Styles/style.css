@@ -1,3 +1,18 @@
+body {
+    max-width: 100%;
+    background-image: linear-gradient(rgba(255,255,255,.90), rgba(255,255,255,.90)), url('../Assets/Background.webp');
+    animation: scrolling 10s linear infinite;
+}  
+
+@keyframes scrolling {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 1000px -1000px;
+    }
+  }
+
 .flex-parent {
     display: flex;
 }
@@ -9,19 +24,31 @@
 .jc-header1 {
     text-align: center; 
     font-size: 108px; 
+    color: white;
+    -webkit-text-stroke: 1px black;
 }
 .jc-paragraph {
     text-align: center; 
     font-size: 48px;
+    color: black;
 }
 .jc-button {
     width: 320px;
     height: 60px;
     font-size: 36px;
     background-color: white;
-    border-radius: 10px;
+    border: 1px solid black;
+    border-radius: 10px
 }
 .jc-button:hover {
     cursor: pointer;
     background-color: rgb(211, 211, 211);
+}
+.jc-game-option {
+    width: 256px;
+    height: 256px;
+}
+.jc-game-option:hover {
+    opacity: 50%;
+    cursor: pointer;
 }

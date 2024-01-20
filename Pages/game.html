@@ -5,8 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../Styles/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
-    <script src="../Scripts/start.js"></script>
+    <h1 class="jc-header1" style="text-align: left; margin: 15px 30px; font-size: 96px;">Round One</h1>
+
+    <div style="width: 1440px; margin: 0 auto; padding-top: 100px;">
+        <input type="image" src="../Assets/IconButtonRock.webp" class="jc-game-option" id="buttonRock"/>
+        <input type="image" src="../Assets/IconButtonPaper.webp" class="jc-game-option" id="buttonPaper"/>
+        <input type="image" src="../Assets/IconButtonScissors.webp" class="jc-game-option" id="buttonScissors"/>
+        <input type="image" src="../Assets/IconButtonLizard.webp" class="jc-game-option" id="buttonLizard"/>
+        <input type="image" src="../Assets/IconButtonSpock.webp" class="jc-game-option" id="buttonSpock"/>
+    </div>
+    <p class="jc-paragraph" style="position: absolute; text-align: left; left: 25px; bottom: 0px; font-size: 64px;">Player 1 - 0</p>
+    <p class="jc-paragraph" id="timerElementID" style="text-align: center; font-size: 144px;">60</p>
+    <p class="jc-paragraph" style="position: absolute; text-align: right; right: 25px; bottom: 0px; font-size: 64px">0 - Player 2</p>
+    <script src="../Scripts/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
