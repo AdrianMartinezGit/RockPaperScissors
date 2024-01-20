@@ -1,7 +1,7 @@
 body {
     max-width: 100%;
     background-image: linear-gradient(rgba(255,255,255,.90), rgba(255,255,255,.90)), url('../Assets/Background.webp');
-    animation: scrolling 10s linear infinite;
+    animation: scrolling 15s linear infinite;
 }  
 
 @keyframes scrolling {
