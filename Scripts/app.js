@@ -31,6 +31,8 @@ let playerTwoScoreText = document.getElementById('playerTwoScoreText');
 let playerResponseText = document.getElementById('playerResponseText');
 playerResponseText.innerText = '';
 
+let canInteract = true;
+
 const GetCPUResponse = async () => {
     const promise = await fetch('https://scottsrpsls.azurewebsites.net/api/RockPaperScissors/GetRandomOption');
     const response = await promise.text();
@@ -41,36 +43,44 @@ let timer = 30;
 timerText.innerText = timer;
 
 setInterval(function() {
-    timer--;
-    console.log(timer);
-    timerText.innerText = timer;
+    if (canInteract) {
+        timer--;
+        console.log(timer);
+        timerText.innerText = timer;
+    }
 }, 1000);
 
 function ButtonResultChange()
 {
+    canInteract = false;
     timer = 30;
     timerText.innerText = timer;
 
-    playerTurn += 1;
-    roundText.innerText = `Round ${roundCurrent} - Player #${playerTurn}'s Turn!`;
-
     setTimeout(function() {
+        playerTurn++;
+        roundText.innerText = `Round ${roundCurrent} - Player #${playerTurn}'s Turn!`;
         playerResponseText.innerText = '';
+        canInteract = true;
+
+        if (playerTurn == 3) {
+            CompareAnswers(playerOneChoice, scissors);
+        }
     }, 3000);
 }
 
 // Button Rock //
 buttonRock.addEventListener('click', function() {
-    playerOneChoice = rock;
-    console.log(playerOneChoice);
-    playerResponseText.innerText = `Player #${playerTurn} Chooses Rock!`;
-    ButtonResultChange();
+    if (canInteract)
+    {
+        playerOneChoice = rock;
+        playerResponseText.innerText = `Player #${playerTurn} Chooses Rock!`;
+        ButtonResultChange();   
+    }
 });
 
 // Button Paper //
 buttonPaper.addEventListener('click', function() {
     playerOneChoice = paper;
-    console.log(playerOneChoice);
     playerResponseText.innerText = `Player #${playerTurn} Chooses Paper!`;
     ButtonResultChange();
 });
@@ -78,7 +88,6 @@ buttonPaper.addEventListener('click', function() {
 // Button Scissor //
 buttonScissors.addEventListener('click', function() {
     playerOneChoice = scissors;
-    console.log(playerOneChoice);
     playerResponseText.innerText = `Player #${playerTurn} Chooses Scissors!`;
     ButtonResultChange();
 });
@@ -86,7 +95,6 @@ buttonScissors.addEventListener('click', function() {
 // Button Lizard //
 buttonLizard.addEventListener('click', function() {
     playerOneChoice = lizard;
-    console.log(playerOneChoice);
     playerResponseText.innerText = `Player #${playerTurn} Chooses Lizard!`;
     ButtonResultChange();
 });
@@ -94,13 +102,9 @@ buttonLizard.addEventListener('click', function() {
 // Button Spock //
 buttonSpock.addEventListener('click', function() {
     playerOneChoice = spock;
-    console.log(playerOneChoice);
     playerResponseText.innerText = `Player #${playerTurn} Chooses Spock!`;
     ButtonResultChange();
 });
-
-
-CompareAnswers(playerOneChoice, playerTwoChoice);
 
 roundText.innerText = `Round ${roundCurrent} - Player #${playerTurn}'s Turn!`;
 
@@ -111,6 +115,9 @@ function CompareAnswers(player1, player2)
         case rock:
             if (player2 == scissors) {
                 playerOneScore++;
+                playerResponseText.innerText = 'Rock crushes scissors!';
+                ButtonResultChange();
+                
             } else if (player2 == lizard) {
                 playerOneScore++;
             }
@@ -191,6 +198,9 @@ function CompareAnswers(player1, player2)
             }
         break;
     }
+
+    playerOneScoreText.innerText = `Player #1 - ${playerOneScore}`;
+    playerTwoScoreText.innerText = `Player #2 - ${playerTwoScore}`;
 }
 
 playerOneScoreText.innerText = `Player #1 - ${playerOneScore}`;
