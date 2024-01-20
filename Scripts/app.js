@@ -50,6 +50,14 @@ setInterval(function() {
     }
 }, 1000);
 
+function clamp(num, min, max) {
+    return num <= min 
+      ? min 
+      : num >= max 
+        ? max 
+        : num
+  }
+
 function ButtonResultChange()
 {
     canInteract = false;
@@ -58,12 +66,17 @@ function ButtonResultChange()
 
     setTimeout(function() {
         playerTurn++;
-        roundText.innerText = `Round ${roundCurrent} - Player #${playerTurn}'s Turn!`;
+        roundText.innerText = `Round ${roundCurrent} - Player #${clamp(playerTurn, 1, 2)}'s Turn!`;
         playerResponseText.innerText = '';
         canInteract = true;
 
         if (playerTurn == 3) {
-            CompareAnswers(playerOneChoice, scissors);
+            CompareAnswers(playerOneChoice, playerTwoChoice);
+        }
+        if (playerTurn == 4) {
+            playerTurn = 1;
+            roundCurrent++;
+            roundText.innerText = `Round ${roundCurrent} - Player #${clamp(playerTurn, 1, 2)}'s Turn!`;
         }
     }, 3000);
 }
@@ -72,41 +85,78 @@ function ButtonResultChange()
 buttonRock.addEventListener('click', function() {
     if (canInteract)
     {
-        playerOneChoice = rock;
-        playerResponseText.innerText = `Player #${playerTurn} Chooses Rock!`;
+        if (playerTurn == 1) {
+            playerOneChoice = rock;
+        } else if (playerTurn == 2) {
+            playerTwoChoice = rock;
+        }
+
+        playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Rock!`;
         ButtonResultChange();   
     }
 });
 
 // Button Paper //
 buttonPaper.addEventListener('click', function() {
-    playerOneChoice = paper;
-    playerResponseText.innerText = `Player #${playerTurn} Chooses Paper!`;
-    ButtonResultChange();
+    if (canInteract)
+    {
+        if (playerTurn == 1) {
+            playerOneChoice = paper;
+        } else if (playerTurn == 2) {
+            playerTwoChoice = paper;
+        }
+
+        playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Paper!`;
+        ButtonResultChange();
+    }
 });
 
 // Button Scissor //
 buttonScissors.addEventListener('click', function() {
-    playerOneChoice = scissors;
-    playerResponseText.innerText = `Player #${playerTurn} Chooses Scissors!`;
-    ButtonResultChange();
+    if (canInteract)
+    {
+        if (playerTurn == 1) {
+            playerOneChoice = scissors;
+        } else if (playerTurn == 2) {
+            playerTwoChoice = scissors;
+        }
+
+        playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Scissors!`;
+        ButtonResultChange();
+    }
 });
 
 // Button Lizard //
 buttonLizard.addEventListener('click', function() {
-    playerOneChoice = lizard;
-    playerResponseText.innerText = `Player #${playerTurn} Chooses Lizard!`;
-    ButtonResultChange();
+    if (canInteract)
+    {
+        if (playerTurn == 1) {
+            playerOneChoice = lizard;
+        } else if (playerTurn == 2) {
+            playerTwoChoice = lizard;
+        }
+
+        playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Lizard!`;
+        ButtonResultChange();
+    }
 });
 
 // Button Spock //
 buttonSpock.addEventListener('click', function() {
-    playerOneChoice = spock;
-    playerResponseText.innerText = `Player #${playerTurn} Chooses Spock!`;
-    ButtonResultChange();
+    if (canInteract)
+    {
+        if (playerTurn == 1) {
+            playerOneChoice = spock;
+        } else if (playerTurn == 2) {
+            playerTwoChoice = spock;
+        }
+        
+        playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Spock!`;
+        ButtonResultChange();
+    }
 });
 
-roundText.innerText = `Round ${roundCurrent} - Player #${playerTurn}'s Turn!`;
+roundText.innerText = `Round ${roundCurrent} - Player #${clamp(playerTurn, 1, 2)}'s Turn!`;
 
 function CompareAnswers(player1, player2)
 {
@@ -115,43 +165,60 @@ function CompareAnswers(player1, player2)
         case rock:
             if (player2 == scissors) {
                 playerOneScore++;
-                playerResponseText.innerText = 'Rock crushes scissors!';
+                playerResponseText.innerText = 'Rock crushes Scissors!';
                 ButtonResultChange();
-                
             } else if (player2 == lizard) {
                 playerOneScore++;
+                playerResponseText.innerText = 'Rock crushes Lizard!';
+                ButtonResultChange();
             }
         break;
 
         case paper:
             if (player2 == rock) {
                 playerOneScore++;
+                playerResponseText.innerText = 'Paper covers Rock!';
+                ButtonResultChange();
             } else if (player2 == spock) {
                 playerOneScore++;
+                playerResponseText.innerText = 'Paper disproves Spock!';
+                ButtonResultChange();
             }
         break;
 
         case scissors:
             if (player2 == paper) {
                 playerOneScore++;
+                playerResponseText.innerText = 'Scissors cut Paper!';
+                ButtonResultChange();
             } else if (player2 == lizard) {
                 playerOneScore++;
+                playerResponseText.innerText = 'Paper decapitates Lizard!';
+                ButtonResultChange();
             }
         break;
 
         case lizard:
             if (player2 == spock) {
                 playerOneScore++;
+                playerResponseText.innerText = 'Lizard poisons Spock!';
+                ButtonResultChange();
             } else if (player2 == paper) {
                 playerOneScore++;
+                playerResponseText.innerText = 'Lizard eats Paper!';
+                ButtonResultChange();
             }
         break;
 
         case spock:
             if (player2 == scissors) {
                 playerOneScore++;
+                playerResponseText.innerText = 'Spock smashes Scissors!';
+                ButtonResultChange();
             } else if (player2 == rock) {
                 playerOneScore++;
+                playerResponseText.innerText = 'Spock Vaporizes Rock!';
+                ButtonResultChange();
             }
         break;
     }
@@ -161,40 +228,60 @@ function CompareAnswers(player1, player2)
         case rock:
             if (player1 == scissors) {
                 playerTwoScore++;
+                playerResponseText.innerText = 'Rock crushes Scissors!';
+                ButtonResultChange();
             } else if (player1 == lizard) {
                 playerTwoScore++;
+                playerResponseText.innerText = 'Rock crushes Lizard!';
+                ButtonResultChange();
             }
         break;
 
         case paper:
             if (player1 == rock) {
                 playerTwoScore++;
+                playerResponseText.innerText = 'Paper covers Rock!';
+                ButtonResultChange();
             } else if (player1 == spock) {
                 playerTwoScore++;
+                playerResponseText.innerText = 'Paper disproves Spock!';
+                ButtonResultChange();                
             }
         break;
 
         case scissors:
             if (player1 == paper) {
                 playerTwoScore++;
+                playerResponseText.innerText = 'Scissors cut Paper!';
+                ButtonResultChange();
             } else if (player1 == lizard) {
                 playerTwoScore++;
+                playerResponseText.innerText = 'Paper decapitates Lizard!';
+                ButtonResultChange();
             }
         break;
 
         case lizard:
             if (player1 == spock) {
                 playerTwoScore++;
+                playerResponseText.innerText = 'Lizard poisons Spock!';
+                ButtonResultChange();
             } else if (player1 == paper) {
                 playerTwoScore++;
+                playerResponseText.innerText = 'Lizard eats Paper!';
+                ButtonResultChange();
             }
         break;
 
         case spock:
             if (player1 == scissors) {
                 playerTwoScore++;
+                playerResponseText.innerText = 'Spock smashes Scissors!';
+                ButtonResultChange();
             } else if (player1 == rock) {
                 playerTwoScore++;
+                playerResponseText.innerText = 'Spock Vaporizes Rock!';
+                ButtonResultChange();
             }
         break;
     }
