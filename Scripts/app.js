@@ -29,27 +29,97 @@ let playerOneScoreText = document.getElementById('playerOneScoreText');
 let playerTwoScoreText = document.getElementById('playerTwoScoreText');
 
 let playerResponseText = document.getElementById('playerResponseText');
-playerResponseText.innerText = '';
+
+if (playerResponseText !== null) {
+    playerResponseText.innerText = '';
+}
+let resultsElement = document.getElementById('resultsElement');
+
+if (resultsElement !== null) {
+    let roundCheck = parseInt(localStorage.roundleftResults);
+
+    resultsElement.innerHTML = `<p class="jc-paragraph" id="resultsElement">
+    Player #1 Score: ${localStorage.playerOneResults}<br>
+    Player #2 Score: ${localStorage.playerTwoResults}<br><br>
+    Time Left: ${localStorage.timeStoreResults}<br>
+    Rounds Reached: ${roundCheck}
+    </p>`;
+}
+
+let playerStatusText = document.getElementById('playerStatusText');
+
+if (playerStatusText !== null) {
+    if (localStorage.playerOneResults > localStorage.playerTwoResults) {
+        playerStatusText.innerText = `Player #1 Won!`;
+    } else if (localStorage.playerOneResults < localStorage.playerTwoResults) {
+        playerStatusText.innerText = `Player #2 Won!`;
+    } else if (localStorage.playerOneResults == localStorage.playerTwoResults) {
+        playerStatusText.innerText = `It's a Tie!`;
+    }
+}
 
 let canInteract = true;
+let altInteract = false;
 
 const GetCPUResponse = async () => {
     const promise = await fetch('https://scottsrpsls.azurewebsites.net/api/RockPaperScissors/GetRandomOption');
     const response = await promise.text();
-    return response;
+    
+    switch (response)
+    {
+        case "Rock":
+            playerTwoChoice = rock;
+            playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Rock!`;
+            ButtonResultChange();   
+        break;
+
+        case "Paper":
+            playerTwoChoice = paper;
+            playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Paper!`;
+            ButtonResultChange();   
+        break;
+
+        case "Scissors":
+            playerTwoChoice = scissors;
+            playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Scissors!`;
+            ButtonResultChange();   
+        break;
+
+        case "Lizard":
+            playerTwoChoice = lizard;
+            playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Lizard!`;
+            ButtonResultChange();   
+        break;
+
+        case "Spock":
+            playerTwoChoice = spock;
+            playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Spock!`;
+            ButtonResultChange();   
+        break;
+    }
 }
 
 let timer = 30;
-timerText.innerText = timer;
 
-setInterval(function() {
-    if (canInteract) {
-        timer--;
-        console.log(timer);
-        timerText.innerText = timer;
-    }
-}, 1000);
+if (timerText != null) {
+    timerText.innerText = timer;
 
+    setInterval(function() {
+        if (canInteract || altInteract) 
+        {
+            timer--;
+            console.log(timer);
+
+            if (timer == 0) {
+                timer = 30;
+                playerResponseText.innerText = `Time is up!`;
+                ButtonResultChange();   
+            }   
+            
+            timerText.innerText = timer;
+        }
+    }, 1000);
+}
 function clamp(num, min, max) {
     return num <= min 
       ? min 
@@ -61,105 +131,193 @@ function clamp(num, min, max) {
 function ButtonResultChange()
 {
     canInteract = false;
-    timer = 30;
-    timerText.innerText = timer;
+    //timer = 30;
+
+    if (timerText != null) {
+        timerText.innerText = timer;
+    }
 
     setTimeout(function() {
         playerTurn++;
-        roundText.innerText = `Round ${roundCurrent} - Player #${clamp(playerTurn, 1, 2)}'s Turn!`;
-        playerResponseText.innerText = '';
-        canInteract = true;
+
+        if (roundText !== null) { roundText.innerText = `Round ${roundCurrent} - Player #${clamp(playerTurn, 1, 2)}'s Turn!`; }
+        
+        if (playerResponseText !== null) playerResponseText.innerText = '';
+        
+        if (localStorage.playerSetting == 0) {
+            canInteract = true;
+        } else {
+            if (!altInteract) {
+                setTimeout(function() {
+                    GetCPUResponse();
+                }, 1000);
+            }
+            altInteract = true;
+        }
 
         if (playerTurn == 3) {
             CompareAnswers(playerOneChoice, playerTwoChoice);
         }
         if (playerTurn == 4) {
+            if (localStorage.modeSetting == 0) {
+                localStorage.playerOneResults = playerOneScore;
+                localStorage.playerTwoResults = playerTwoScore;
+                localStorage.timeStoreResults = timer;
+                localStorage.roundleftResults = clamp(roundCurrent, 1, 10);
+
+                window.location.href='./results.html';                   
+            } else if (localStorage.modeSetting == 1) {
+                if (roundCurrent == 5) {
+                    localStorage.playerOneResults = playerOneScore;
+                    localStorage.playerTwoResults = playerTwoScore;
+                    localStorage.timeStoreResults = timer;
+                    localStorage.roundleftResults = clamp(roundCurrent, 1, 10);
+                    
+                    window.location.href='./results.html';
+                } 
+                if (playerOneScore == 3 || playerTwoScore == 3)
+                {
+                    localStorage.playerOneResults = playerOneScore;
+                    localStorage.playerTwoResults = playerTwoScore;
+                    localStorage.timeStoreResults = timer;
+                    localStorage.roundleftResults = clamp(roundCurrent, 1, 10);
+
+                    window.location.href='./results.html';
+                } 
+            } else if (localStorage.modeSetting == 2) {
+                if (roundCurrent == 7) {
+                    localStorage.playerOneResults = playerOneScore;
+                    localStorage.playerTwoResults = playerTwoScore;
+                    localStorage.timeStoreResults = timer;
+                    localStorage.roundleftResults = clamp(roundCurrent, 1, 10);
+
+                    window.location.href='./results.html';
+                } 
+                if (playerOneScore == 4 || playerTwoScore == 4)
+                {
+                    localStorage.playerOneResults = playerOneScore;
+                    localStorage.playerTwoResults = playerTwoScore;
+                    localStorage.timeStoreResults = timer;
+                    localStorage.roundleftResults = clamp(roundCurrent, 1, 10);
+
+                    window.location.href='./results.html';
+                } 
+            }
+
+            altInteract = false;
             playerTurn = 1;
             roundCurrent++;
-            roundText.innerText = `Round ${roundCurrent} - Player #${clamp(playerTurn, 1, 2)}'s Turn!`;
+
+            if (roundText !== null) {
+                roundText.innerText = `Round ${roundCurrent} - Player #${clamp(playerTurn, 1, 2)}'s Turn!`;
+            }
         }
     }, 3000);
 }
 
 // Button Rock //
-buttonRock.addEventListener('click', function() {
-    if (canInteract)
-    {
-        if (playerTurn == 1) {
-            playerOneChoice = rock;
-        } else if (playerTurn == 2) {
-            playerTwoChoice = rock;
+if (buttonRock !== null) {
+    buttonRock.addEventListener('click', function() {
+        if (canInteract)
+        {
+            if (playerTurn == 1) {
+                playerOneChoice = rock;
+            } else if (playerTurn == 2) {
+                playerTwoChoice = rock;
+            }
+
+            playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Rock!`;
+            ButtonResultChange();   
         }
-
-        playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Rock!`;
-        ButtonResultChange();   
-    }
-});
-
+    });
+}
 // Button Paper //
-buttonPaper.addEventListener('click', function() {
-    if (canInteract)
-    {
-        if (playerTurn == 1) {
-            playerOneChoice = paper;
-        } else if (playerTurn == 2) {
-            playerTwoChoice = paper;
+if (buttonPaper !== null) {
+    buttonPaper.addEventListener('click', function() {
+        if (canInteract)
+        {
+            if (playerTurn == 1) {
+                playerOneChoice = paper;
+            } else if (playerTurn == 2) {
+                playerTwoChoice = paper;
+            }
+    
+            playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Paper!`;
+            ButtonResultChange();
         }
+    });
+}
 
-        playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Paper!`;
-        ButtonResultChange();
-    }
-});
 
 // Button Scissor //
-buttonScissors.addEventListener('click', function() {
-    if (canInteract)
-    {
-        if (playerTurn == 1) {
-            playerOneChoice = scissors;
-        } else if (playerTurn == 2) {
-            playerTwoChoice = scissors;
+if (buttonScissors !== null) {
+    buttonScissors.addEventListener('click', function() {
+        if (canInteract)
+        {
+            if (playerTurn == 1) {
+                playerOneChoice = scissors;
+            } else if (playerTurn == 2) {
+                playerTwoChoice = scissors;
+            }
+    
+            playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Scissors!`;
+            ButtonResultChange();
         }
+    });
+}
 
-        playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Scissors!`;
-        ButtonResultChange();
-    }
-});
 
 // Button Lizard //
-buttonLizard.addEventListener('click', function() {
-    if (canInteract)
-    {
-        if (playerTurn == 1) {
-            playerOneChoice = lizard;
-        } else if (playerTurn == 2) {
-            playerTwoChoice = lizard;
+if (buttonLizard !== null) {
+    buttonLizard.addEventListener('click', function() {
+        if (canInteract)
+        {
+            if (playerTurn == 1) {
+                playerOneChoice = lizard;
+            } else if (playerTurn == 2) {
+                playerTwoChoice = lizard;
+            }
+    
+            playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Lizard!`;
+            ButtonResultChange();
         }
+    });
+}
 
-        playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Lizard!`;
-        ButtonResultChange();
-    }
-});
 
 // Button Spock //
-buttonSpock.addEventListener('click', function() {
-    if (canInteract)
-    {
-        if (playerTurn == 1) {
-            playerOneChoice = spock;
-        } else if (playerTurn == 2) {
-            playerTwoChoice = spock;
+if (buttonSpock !== null) {
+    buttonSpock.addEventListener('click', function() {
+        if (canInteract)
+        {
+            if (playerTurn == 1) {
+                playerOneChoice = spock;
+            } else if (playerTurn == 2) {
+                playerTwoChoice = spock;
+            }
+            
+            playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Spock!`;
+            ButtonResultChange();
         }
-        
-        playerResponseText.innerText = `Player #${clamp(playerTurn, 1, 2)} Chooses Spock!`;
-        ButtonResultChange();
-    }
-});
+    });
+}
 
-roundText.innerText = `Round ${roundCurrent} - Player #${clamp(playerTurn, 1, 2)}'s Turn!`;
+if (roundText !== null) {
+    roundText.innerText = `Round ${roundCurrent} - Player #${clamp(playerTurn, 1, 2)}'s Turn!`;
+}
 
 function CompareAnswers(player1, player2)
 {
+    if (player1 == player2) {
+        playerResponseText.innerText = `It's a Tie!`;
+        ButtonResultChange();
+
+        playerOneScoreText.innerText = `Player #1 - ${playerOneScore}`;
+        playerTwoScoreText.innerText = `Player #2 - ${playerTwoScore}`;
+
+        return;
+    }
+
     switch (player1) 
     {
         case rock:
@@ -193,7 +351,7 @@ function CompareAnswers(player1, player2)
                 ButtonResultChange();
             } else if (player2 == lizard) {
                 playerOneScore++;
-                playerResponseText.innerText = 'Paper decapitates Lizard!';
+                playerResponseText.innerText = 'Scissors decapitates Lizard!';
                 ButtonResultChange();
             }
         break;
@@ -256,7 +414,7 @@ function CompareAnswers(player1, player2)
                 ButtonResultChange();
             } else if (player1 == lizard) {
                 playerTwoScore++;
-                playerResponseText.innerText = 'Paper decapitates Lizard!';
+                playerResponseText.innerText = 'Scissors decapitates Lizard!';
                 ButtonResultChange();
             }
         break;
@@ -289,6 +447,9 @@ function CompareAnswers(player1, player2)
     playerOneScoreText.innerText = `Player #1 - ${playerOneScore}`;
     playerTwoScoreText.innerText = `Player #2 - ${playerTwoScore}`;
 }
-
-playerOneScoreText.innerText = `Player #1 - ${playerOneScore}`;
-playerTwoScoreText.innerText = `Player #2 - ${playerTwoScore}`;
+if (playerOneScoreText !== null) {
+    playerOneScoreText.innerText = `Player #1 - ${playerOneScore}`;
+}
+if (playerTwoScoreText !== null) {
+    playerTwoScoreText.innerText = `Player #2 - ${playerTwoScore}`;
+}
